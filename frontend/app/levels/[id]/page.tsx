@@ -103,15 +103,28 @@ export default function LevelPage() {
               <motion.button 
                 key={idx}
                 onClick={() => {
-                  if (option.title === "Code It") {
-                    router.push(`/levels/${levelId}/code-it`);
-                  } 
-                  else if (option.title === "Recap Quiz") {
-                    router.push(`/levels/${levelId}/quiz`); }
-                  else if (option.title === "Flashcards") {
-                    router.push(`/levels/${levelId}/flashcards`);
-                  }
-                }}
+                  switch (option.title) {
+                    case "Tutorial":
+                      router.push(`/levels/${levelId}/tutorial`);
+                      break;
+                      
+                    case "Flashcards":
+                      router.push(`/levels/${levelId}/flashcards`);
+                      break;
+
+                    case "Gamiz":
+                      router.push(`/levels/${levelId}/gamiz`);
+                      break;
+
+                    case "Recap Quiz":
+                      router.push(`/levels/${levelId}/quiz`);
+                      break;
+
+                    case "Code It":
+                      router.push(`/levels/${levelId}/code-it`);
+                      break;
+                      }
+                  }}
                 whileHover={{ y: -8, scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className={`

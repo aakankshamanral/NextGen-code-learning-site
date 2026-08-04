@@ -28,6 +28,33 @@ export interface LevelContent {
   quizQuestions: QuizQuestion[];
 }
 
+export interface BugHunterQuestion {
+  code: string[];
+  wrongToken: string;
+  fixes: string[];
+  correctFix: string;
+}
+
+export interface LevelContent {
+  title: string;
+  animal: string;
+  dialogue: string;
+  pdf: string;
+  themeColor: string;
+  topics: string[];
+  flashcards: { question: string; answer: string }[];
+  challenge?: CodingChallenge;
+  quizQuestions: QuizQuestion[];
+
+  bugHunter?: BugHunterQuestion[];
+  bugHunterTutorial?: GameTutorial;
+}
+
+export interface GameTutorial {
+  title: string;
+  points: string[];
+}
+
 export const LEVEL_DATA: Record<string, LevelContent> = {
   "1": {
     title: "Introduction to C",
@@ -68,8 +95,89 @@ export const LEVEL_DATA: Record<string, LevelContent> = {
   { q: "Which format specifier is required to print a 'double' value?", options: ["%d", "%f", "%c", "%lf"], correct: 3, explanation: "While %f works for floats, %lf (Long Float) is the precise specifier for double values." },
   { q: "In C, a 'char' variable is actually stored internally as:", options: ["A small image", "A string", "An ASCII integer value", "A boolean"], correct: 2, explanation: "Characters are mapped to specific integer values in the ASCII table for machine processing." },
   { q: "What is the result of 'signed' vs 'unsigned' for an integer?", options: ["Signed allows negative numbers", "Unsigned is faster", "Signed uses more memory", "There is no difference"], correct: 0, explanation: "Signed integers reserve one bit for the +/- sign, whereas unsigned use all bits for positive range." }
-]
+] ,
 
+bugHunter: [
+  {
+    code: [
+      "int main()",
+      "{",
+      '    pritnf("Hello World");',
+      "    return 0;",
+      "}"
+    ],
+    wrongToken: "pritnf",
+    fixes: ["printf", "print", "scanff"],
+    correctFix: "printf",
+  },
+
+  {
+    code: [
+      "int main()",
+      "{",
+      "    int a = 10",
+      '    printf("%d", a);',
+      "}"
+    ],
+    wrongToken: "10",
+    fixes: ["10;", "10,", "10:"],
+    correctFix: "10;",
+  },
+
+  {
+    code: [
+      "int main()",
+      "{",
+      "    int a;",
+      '    scanf("%d", a);',
+      "}"
+    ],
+    wrongToken: "a",
+    fixes: ["&a", "*a", "a[]"],
+    correctFix: "&a",
+  },
+
+  {
+    code: [
+      "int main()",
+      "{",
+      "    int x = 5;",
+      "    if(x=10)",
+      '        printf("Yes");',
+      "}"
+    ],
+    wrongToken: "=",
+    fixes: ["==", "!=", "<="],
+    correctFix: "==",
+  },
+
+  {
+    code: [
+      "int main()",
+      "{",
+      "    int a = 5;",
+      "    float b = 2;",
+      '    printf("%f", a);',
+      "}"
+    ],
+    wrongToken: "%f",
+    fixes: ["%d", "%c", "%lf"],
+    correctFix: "%d",
+  }
+],
+
+  
+bugHunterTutorial: {
+  title: "Bug Hunter",
+  points: [
+    "Read the C code carefully and find the incorrect syntax.",
+    "Click on the word or symbol you think is wrong.",
+    "Press SHOOT BUG to eliminate the selected target.",
+    "Choose the correct replacement to repair the code.",
+    "Complete all 5 bug missions to finish the chapter.",
+    "Each correct mission gives 1 point. Maximum score: 5/5."
+  ]
+},
   },
 
   "2": {
