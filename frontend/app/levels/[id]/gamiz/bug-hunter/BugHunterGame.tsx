@@ -6,6 +6,8 @@ import HUD from "./HUD";
 import CodeEditor from "./CodeEditor";
 import RepairModal from "./RepairModal";
 import ResultModal from "./ResultModal";
+import Crosshair from "./Crosshair";
+import { motion } from "framer-motion";
 
 import { BugQuestion } from "./types";
 
@@ -34,8 +36,9 @@ export default function BugHunterGame({
   const [repairOpen, setRepairOpen] =
     useState(false);
 
-  const [resultOpen, setResultOpen] =
-    useState(false);
+  const [resultOpen, setResultOpen] = useState(false);
+
+  const [showMiss, setShowMiss] = useState(false);
 
   const current =
     questions[mission];
@@ -58,21 +61,32 @@ export default function BugHunterGame({
 
     } else {
 
-      const nextAttempts = attempts + 1;
+  setShowMiss(true);
 
-      setAttempts(nextAttempts);
+  setTimeout(() => {
+    setShowMiss(false);
+  }, 1200);
 
-      if (nextAttempts >= 3) {
+  const nextAttempts = attempts + 1;
 
-        setHint(true);
+  setAttempts(nextAttempts);
 
-      }
+  if (nextAttempts >= 3) {
 
-    }
+    setHint(true);
+
+  }
+
+}
 
   }, 450);
 
+  
+
 };
+
+
+
     /* ---------------- Repair ---------------- */
 
   const handleRepair = (answer: string) => {
@@ -135,6 +149,11 @@ export default function BugHunterGame({
 
   return (
 
+    <>
+    
+
+    <Crosshair />
+
     <div className="max-w-7xl mx-auto px-8 pb-16">
 
       <HUD
@@ -156,6 +175,21 @@ export default function BugHunterGame({
     }
   }}
 />
+{showMiss && (
+  <motion.div
+    initial={{ opacity: 0, scale: 0.7 }}
+    animate={{ opacity: 1, scale: 1 }}
+    exit={{ opacity: 0 }}
+    transition={{ duration: 0.2 }}
+    className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50"
+  >
+    <div className="bg-red-600/95 border border-red-400 rounded-xl px-5 py-3 shadow-2xl">
+      <p className="text-white text-base font-bold">
+        ❌ Wrong Target
+      </p>
+    </div>
+  </motion.div>
+)}
 
       {/* Hint Message */}
 
@@ -198,7 +232,9 @@ export default function BugHunterGame({
         onRestart={restartGame}
         onExit={() => window.history.back()}
       />
-          </div>
+              </div>
+
+  </>
 
   );
 

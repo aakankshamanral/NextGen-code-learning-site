@@ -3,14 +3,23 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-export default function Crosshair() {
-  const [pos, setPos] = useState({ x: 0, y: 0 });
+interface Props {
+  shooting?: boolean;
+}
+
+export default function Crosshair({
+  shooting = false,
+}: Props) {
+  const [mouse, setMouse] = useState({
+    x: 0,
+    y: 0,
+  });
 
   useEffect(() => {
     document.body.style.cursor = "none";
 
     const move = (e: MouseEvent) => {
-      setPos({
+      setMouse({
         x: e.clientX,
         y: e.clientY,
       });
@@ -26,24 +35,32 @@ export default function Crosshair() {
 
   return (
     <motion.div
+      className="fixed top-0 left-0 z-[9999] pointer-events-none"
       animate={{
-        x: pos.x - 18,
-        y: pos.y - 18,
+        x: mouse.x - 18,
+        y: mouse.y - 18,
+        scale: shooting ? [1, 1.3, 1] : 1,
       }}
       transition={{
-        type: "spring",
-        stiffness: 600,
-        damping: 35,
+        x: {
+          type: "spring",
+          stiffness: 800,
+          damping: 35,
+        },
+        y: {
+          type: "spring",
+          stiffness: 800,
+          damping: 35,
+        },
       }}
-      className="fixed pointer-events-none z-[9999]"
     >
       <div className="relative w-9 h-9">
 
-        <div className="absolute inset-0 rounded-full border-2 border-red-500 shadow-[0_0_15px_rgba(255,0,0,0.8)]" />
+        <div className="absolute inset-0 rounded-full border-2 border-red-500 shadow-[0_0_12px_red]" />
 
-        <div className="absolute left-1/2 top-0 h-full w-[2px] bg-red-500 -translate-x-1/2" />
+        <div className="absolute left-1/2 top-0 w-[2px] h-full bg-red-500 -translate-x-1/2" />
 
-        <div className="absolute top-1/2 left-0 w-full h-[2px] bg-red-500 -translate-y-1/2" />
+        <div className="absolute top-1/2 left-0 h-[2px] w-full bg-red-500 -translate-y-1/2" />
 
         <div className="absolute left-1/2 top-1/2 w-2 h-2 rounded-full bg-red-500 -translate-x-1/2 -translate-y-1/2" />
 
